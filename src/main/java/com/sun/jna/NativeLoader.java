@@ -8,7 +8,7 @@ import java.io.IOException;
 public class NativeLoader {
 
     static {
-        if (NativeLibraryUtil.getArchitecture() == NativeLibraryUtil.Architecture.OSX_ARM64) {
+        if (isAppleSilicon()) {
             try {
                 String path = NativeLibraryUtil.getPlatformLibraryPath(NativeLibraryUtil.DEFAULT_SEARCH_PATH);
                 File extracted = org.scijava.nativelib.NativeLoader.getJniExtractor().extractJni(path, "jnidispatch");
@@ -23,8 +23,12 @@ public class NativeLoader {
         }
     }
 
+    public static boolean isAppleSilicon() {
+        return NativeLibraryUtil.getArchitecture() == NativeLibraryUtil.Architecture.OSX_ARM64;
+    }
+
     public static void loadAppleSilicon() {
-        if (NativeLibraryUtil.getArchitecture() == NativeLibraryUtil.Architecture.OSX_ARM64) {
+        if (isAppleSilicon()) {
             System.setProperty("jna.nosys", "true");
         }
     }
